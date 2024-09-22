@@ -1,0 +1,2 @@
+1. run sender main
+2. run receiver mai

@@ -6,6 +6,9 @@ import os, string
 from pathlib import Path
 
 class Receive:
+    """
+    This class is used to receive the message created by a sender.
+    """
     def __init__(self):
         self.filepath = os.curdir + "\\files\\"
         os.chdir(self.filepath)
@@ -13,16 +16,26 @@ class Receive:
         self.all_letters = string.ascii_letters
         self.decrypted_message = []
         self.decryption_dictionary = {}
-        key = 4
+        key = 22
         for i in range(len(self.all_letters)):
             self.decryption_dictionary[self.all_letters[i]] = self.all_letters[(i - key) % (len(self.all_letters))]
 
     def receive_message(self):
+        """
+        @name receive_message \n
+        @function this function is used to receive the message created by a sender.
+        :return:
+        """
         paths = sorted(Path().iterdir(), key=os.path.getmtime)
-        for cf in paths:
-            self.message = self.message + str(cf)[5]
+        for path in paths:
+            self.message = self.message + str(path)[5]
 
     def decrypt_message(self):
+        """
+        @name decrypt_message \n
+        @function this function is used to decrypt the message created by a sender.
+        :return:
+        """
         for char in self.message:
             if char in self.all_letters:
                 temp = self.decryption_dictionary[char]
@@ -33,17 +46,20 @@ class Receive:
         self.decrypted_message = "".join(self.decrypted_message)
 
         for filename in os.listdir(os.curdir):
-            os.remove(os.curdir + "\\" + filename)
+            if filename.endswith(".txt"):
+                continue
+            else:
+                os.remove(os.curdir + "\\" + filename)
 
 
         return self.decrypted_message
 
 
 def main():
-    receiver = Receive()
-    receiver.receive_message()
-    receiver.decrypt_message()
-    print(receiver.decrypted_message)
+    receiver = Receive() # create instance
+    receiver.receive_message() # receive encrypted message
+    receiver.decrypt_message() # decrypt message
+    print(receiver.decrypted_message) # print
 
 if __name__ == "__main__":
     main()
